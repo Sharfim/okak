@@ -1,6 +1,8 @@
 import sqlite3
 import os
 import config
+#мои модули
+from models import User
 
 class Database:
     def __init__(self):
@@ -26,6 +28,7 @@ class Database:
     def create_table(self):
         self.query("""
             CREATE TABLE IF NOT EXISTS users (
+                anonymous_id INTEGER PRIMARY KEY
                 user_id INTEGER,
                 user_username TEXT, 
                 chat_id INTEGER, 
@@ -38,10 +41,10 @@ class Database:
             )
         """)
 
-    def get_user(self, user_id: int) -> dict | None:
+    def get_user(self, user_id: int) -> User | None:
         result = self.query("SELECT rowid, * FROM users WHERE user_id = ?", (user_id,), is_select=True)
         if result:
-            return result[0]
+            return User(result[0], self)
         return None
 
     def add_user(self, user_id: int, chat_id: int, username: str) -> dict:
@@ -51,12 +54,6 @@ class Database:
             (user_id, chat_id, username)
         )
         return self.get_user(user_id)
-
-    def partner_information(self, user_id: int) -> dict | None:
-        user = self.get_user(user_id)
-        if user and user['partner_id']:
-            return self.get_user(user['partner_id'])
-        return None
 
     def unification_of_users(self, user_id: int, partner_id: int):
         for pid, uid in [(partner_id, user_id), (user_id, partner_id)]:

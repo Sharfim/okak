@@ -35,11 +35,6 @@ def user_profile(message):
     profile.user_profile(message, bot)
 
 
-@bot.callback_query_handler(func=lambda call: call.data == "change_profile")
-def change_profile(call):
-    profile.change_profile(call, bot)
-
-
 @bot.callback_query_handler(func=lambda call: call.data.startswith("change_profile_"))
 def change_profile_(call):
     profile.change_profile_(call, bot)
@@ -52,7 +47,7 @@ def search_partner(message):
     search.search_partner(message, bot)
 
 
-@bot.message_handler(func=lambda message: message.text == "Стоп поиск")
+@bot.callback_query_handler(func=lambda call: call.data == "stop_search")
 def stop_search(message):
     search.stop_search(message, bot)
 
