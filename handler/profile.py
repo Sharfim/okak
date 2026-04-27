@@ -65,3 +65,4 @@ def func_change_profile_name(message, bot:TeleBot):
 def func_change_profile_description(message, bot:TeleBot):
     db.query("UPDATE users SET description = ? WHERE user_id = ?", (message.text, message.from_user.id))
     bot.send_message(message.chat.id, "✅ Описание профиля обновлено!")
+#проверяю гит хаб
