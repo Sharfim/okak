@@ -5,7 +5,9 @@ from telebot import types
 #мои модули
 from database import Database, User
 from .anonymous.chat import stop
+from handler.import_bot import bot_import
 
+bot = bot_import()
 db = Database()
 
 def markup_likes_dislikes() -> types.InlineKeyboardMarkup:
@@ -19,7 +21,8 @@ def markup_likes_dislikes() -> types.InlineKeyboardMarkup:
     return markup
 
 
-def likes_dislikes(call, bot: TeleBot):
+@bot.callback_query_handler(func=lambda call: call.data.startswith("add_l_"))
+def likes_dislikes(call):
     partner_id = db.get_user(call.from_user.id)['partner_id']
 
     if call.data == "add_l_likes":

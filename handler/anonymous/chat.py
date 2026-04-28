@@ -1,12 +1,15 @@
 from telebot import TeleBot
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 #мои модули
 from database import Database, User
 from handler import likes_dislikes as l_likes
+from handler.import_bot import bot_import
 
+bot = bot_import()
 db = Database()
 
-def stop(message, bot: TeleBot):
+
+@bot.message_handler(func=lambda message: message.text == "стоп")
+def stop(message):
     user_id = message.from_user.id
     user = db.get_user(user_id)
 
@@ -23,7 +26,8 @@ def stop(message, bot: TeleBot):
         bot.send_message(user_id, "Вы не находитесь в поиске или чате.")
 
 
-def anonymous_conversation(message, bot: TeleBot):
+@bot.message_handler(func=lambda message: True)
+def anonymous_conversation(message):
     user_id = message.from_user.id
     user = db.get_user(user_id)
 

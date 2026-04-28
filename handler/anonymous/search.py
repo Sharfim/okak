@@ -2,7 +2,9 @@ from telebot import TeleBot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 #мои модули lol
 from database import Database, User
+from handler.import_bot import bot_import
 
+bot = bot_import()
 db = Database()
 
 def anonymous_message(user:User)->str:
@@ -11,8 +13,8 @@ def anonymous_message(user:User)->str:
             f"\n\nЕго рейтинг:{user.likes}👍 {user.dislikes}👎")
 
 
-#@bot.message_handler(func=lambda message: message.text == "Найти собеседника")
-def search_partner(message, bot: TeleBot):
+@bot.message_handler(func=lambda message: message.text == "Найти собеседника")
+def search_partner(message):
     user_id = message.from_user.id
     user: User = db.get_user(user_id)
 
@@ -41,8 +43,8 @@ def search_partner(message, bot: TeleBot):
         db.change_status(user_id, "searching")
 
 
-#@bot.callback_query_handler(func=lambda call: call.data == "stop_search")
-def stop_search(message, bot: TeleBot):
+@bot.callback_query_handler(func=lambda call: call.data == "stop_search")
+def stop_search(message):
     user: User = db.get_user(message.from_user.id)
 
     if user.is_status("searching"):
@@ -50,4 +52,3 @@ def stop_search(message, bot: TeleBot):
         bot.send_message(message.chat.id, "Поиск остановлен")
     else:
         bot.send_message(message.chat.id, "Вы не находитесь в активном поиске")
-        

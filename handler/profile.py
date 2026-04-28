@@ -2,11 +2,14 @@ from telebot import TeleBot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 #мои модули
 from database import Database
+from handler.import_bot import bot_import
 
+bot = bot_import()
 db = Database()
 
 
-def user_profile(message, bot: TeleBot):
+@bot.message_handler(func=lambda message: message.text == "Мой профиль")
+def user_profile(message):
     # 1. Получаем данные
     user = db.get_user(message.from_user.id)
 
@@ -26,7 +29,7 @@ def user_profile(message, bot: TeleBot):
     return None
 
 
-
+@bot.callback_query_handler(func=lambda call: call.data.startswith("change_profile_"))
 def change_profile(call, bot:TeleBot):
     if call.data == "change_profile_":
         markup = InlineKeyboardMarkup()
