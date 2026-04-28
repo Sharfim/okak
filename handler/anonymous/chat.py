@@ -8,8 +8,14 @@ from handler.import_bot import bot_import
 bot = bot_import()
 db = Database()
 
+def filters_chat(message):
+    return db.get_user(message.from_user.id).is_status("chatting")
 
-@bot.message_handler(func=lambda message: message.text == "стоп")
+def not_filters_chat(message):
+    return not filters_chat(message)
+
+
+@bot.message_handler(func=lambda message: message.text == "стоп" and filters_chat(message))
 def stop(message):
     user_id = message.from_user.id
     user = db.get_user(user_id)
@@ -23,18 +29,12 @@ def stop(message):
 
         bot.send_message(user_id, f"Вы завершили диалог с {partner.name}. Оцените беседу", reply_markup=markup)
         bot.send_message(partner.chat_id, f"Собеседник {user.name} завершил диалог. Оцените беседу", reply_markup=markup)
-    else:
-        bot.send_message(user_id, "Вы не находитесь в поиске или чате.")
 
 
-@bot.message_handler(func=lambda message: True)
+@bot.message_handler(func=filters_chat)
 def anonymous_conversation(message):
     user_id = message.from_user.id
     user = db.get_user(user_id)
-
-    if not user or user.status != 'chatting':
-        # Если юзер просто пишет в бота вне чата
-        return bot.send_message(message.chat.id, "Вы не находитесь в чате. Нажмите 'Найти собеседника'.")
 
     partner: User = user.get_partner()
 
@@ -45,3 +45,8 @@ def anonymous_conversation(message):
         except Exception as e:
             print(f"Ошибка при копировании: {e}")
             bot.send_message(user_id, "Не удалось отправить сообщение собеседнику.")
+
+
+@bot.message_handler(func=not_filters_chat)
+def ad_chat(message):
+    return bot.send_message(message.chat.id, "Вы не находитесь в чате. Нажмите 'Найти собеседника'.")
