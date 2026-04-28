@@ -22,7 +22,7 @@ def search_partner(message, bot: TeleBot):
     bot.send_message(user_id, "🔍 Ищу собеседника...", reply_markup=markup)
 
     partners = db.query(
-        "SELECT rowid, * FROM users WHERE status = 'searching' AND user_id != ? LIMIT 1",
+        "SELECT * FROM users WHERE status = 'searching' AND user_id != ? LIMIT 1",
         (user_id,),
         is_select=True
     )
