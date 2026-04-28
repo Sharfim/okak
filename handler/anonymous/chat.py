@@ -1,3 +1,4 @@
+import telebot
 from telebot import TeleBot
 #мои модули
 from database import Database, User
