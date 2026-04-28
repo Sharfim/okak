@@ -63,7 +63,6 @@ class Database:
         self.query("UPDATE users SET status = ? WHERE user_id = ?", (status, user_id))
 
     def add_likes_dislikes(self, user_id: int, type_l: str, quantity: int = 1):
-        # ИСПРАВЛЕНИЕ 3: Исправил логику. Мы передаем partner_id, чтобы начислить лайк ПАРТНЕРУ
         if type_l == "likes":
             self.query("UPDATE users SET likes = likes + ? WHERE user_id = ?", (quantity, user_id))
         elif type_l == "dislikes":
