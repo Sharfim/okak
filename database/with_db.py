@@ -53,7 +53,6 @@ class Database:
             "INSERT OR IGNORE INTO users (user_id, chat_id, user_username) VALUES (?, ?, ?)",
             (user_id, chat_id, username)
         )
-        return self.get_user(user_id)
 
     def unification_of_users(self, user_id: int, partner_id: int):
         for pid, uid in [(partner_id, user_id), (user_id, partner_id)]:
@@ -70,5 +69,9 @@ class Database:
         elif type_l == "dislikes":
             self.query("UPDATE users SET dislikes = dislikes + ? WHERE user_id = ?", (quantity, user_id))
 
-    def get_user_storage(self, user_id: int, user_chat_id: int, username: str) -> dict:
-        return self.add_user(user_id, user_chat_id, username)
+    def get_user_storage(self, user_id: int, user_chat_id: int, username: str) -> User:
+        if self.get_user(user_id):
+            return self.get_user(user_id)
+        else:
+            self.add_user(user_id, user_chat_id, username)
+            return self.get_user(user_id)
