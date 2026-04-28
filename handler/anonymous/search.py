@@ -50,3 +50,4 @@ def stop_search(message, bot: TeleBot):
         bot.send_message(message.chat.id, "Поиск остановлен")
     else:
         bot.send_message(message.chat.id, "Вы не находитесь в активном поиске")
+        
