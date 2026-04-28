@@ -16,7 +16,7 @@ class User:
     def is_status(self, status: str) -> bool:
         return self.status == status
 
-    def get_partner(self) -> User:
+    def get_partner(self) -> "User":
         if not self.partner_id or self.partner_id == 0:
             return None
         # Возвращаем объект партнера, вызывая асинхронный метод БД
