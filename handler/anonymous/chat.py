@@ -50,3 +50,4 @@ def anonymous_conversation(message):
 @bot.message_handler(func=not_filters_chat)
 def ad_chat(message):
     return bot.send_message(message.chat.id, "Вы не находитесь в чате. Нажмите 'Найти собеседника'.")
+#main
