@@ -28,17 +28,15 @@ def search_partner(message, bot: TeleBot):
     )
 
     if partners:
-        partner = partners[0]
+        partner: User = db.get_user(partners[0])
         # Соединяем
-        db.unification_of_users(user_id, partner['user_id'])
+        db.unification_of_users(user_id, partner.user_id)
 
         # Отправляем тебе инфу о партнере
-        bot.send_message(user_id, "Партнер найден!\n" + anonymous_message(user.get_partner()))
+        bot.send_message(user_id, "Партнер найден!\n" + anonymous_message(partner))
 
-        # Берем свои данные. ВАЖНО: убедись, что get_user возвращает словарь!
-        me = db.get_user(user_id)
-        if me:
-            bot.send_message(partner['chat_id'], "Партнер найден!\n" + anonymous_message(me))
+        if user:
+            bot.send_message(partner.chat_id, "Партнер найден!\n" + anonymous_message(user))
     else:
         db.change_status(user_id, "searching")
 
