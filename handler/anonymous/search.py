@@ -1,6 +1,6 @@
 from telebot import TeleBot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-#мои модули
+#мои модули lol
 from database import Database, User
 
 db = Database()
