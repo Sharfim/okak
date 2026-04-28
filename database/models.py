@@ -26,15 +26,3 @@ class User:
         # Пример метода, который сам обновляет себя в базе
         self.db.change_status(self.user_id, new_status)
         self.status = new_status
-
-    def set_val(self, key: str, value):
-        """Обновляет одну конкретную колонку для текущего юзера"""
-        # В SQL параметры (?) работают только для значений, 
-        # поэтому имя колонки вставляем через f-строку
-        sql = f"UPDATE users SET {key} = ? WHERE user_id = ?"
-        self.db.query(sql, (value, self.user_id))
-    
-        # Сразу обновляем атрибут в самом объекте User, 
-        # чтобы данные внутри программы были актуальными
-        if hasattr(self, key):
-            setattr(self, key, value)
