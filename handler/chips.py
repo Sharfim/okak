@@ -16,8 +16,7 @@ def top_table(message):
         for i, user in enumerate(users, start=1):
             # Извлекаем данные (зависит от того, что возвращает db.query: кортеж или словарь)
             # Если db.query возвращает список кортежей, то: name, likes = user
-            name = user[0]
-            likes = user[1]
+            name, likes = user[0], user[1]
             lines.append(f"{i}: {name} — {likes} 👍")
         
         message_table = "🏆 **Топ пользователей:**\n\n" + "\n".join(lines)
