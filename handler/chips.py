@@ -23,3 +23,4 @@ def top_table(message):
         bot.send_message(message.chat.id, message_table, parse_mode="Markdown")
     else:
         bot.send_message(message.chat.id, "Слишком мало пользователей для топа (нужно хотя бы 3).")
+
