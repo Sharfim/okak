@@ -15,3 +15,7 @@ def load_json() -> dict:
 def load_evn() -> str:
     load_dotenv()
     return os.getenv("api_token")
+
+if __name__ == "__main__":
+    print(load_json())
+    print(load_evn())
