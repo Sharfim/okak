@@ -14,4 +14,4 @@ def load_json() -> dict:
     
 def load_evn() -> str:
     load_dotenv()
-    return os.get_env("api_token")
+    return os.getenv("api_token")
